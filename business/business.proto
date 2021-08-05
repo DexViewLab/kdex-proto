@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package business.api;
+
+message OnNewPairRequest {
+}
+
+message OnNewPairResponse {
+}
+
+message SubNewTokenRequest {
+}
+
+message SubNewTokenResponse {
+}
+
+
+service Business {
+  // 有新币，给订阅的用户发邮件
+  rpc OnNewPair (OnNewPairRequest) returns (OnNewPairResponse) {
+  }
+
+  // 订阅某个币上新
+  rpc SubNewToken (SubNewTokenRequest) returns (SubNewTokenResponse) {
+  }
+}

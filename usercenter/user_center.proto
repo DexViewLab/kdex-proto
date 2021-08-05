@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package usercenter.api;
+
+message RegisterRequest {
+}
+
+message LoginRequest {
+}
+
+// 注册，登录，改密码，重置密码的回复
+message SignResponse {
+}
+
+message LogoutRequest {
+}
+
+message LogoutResponse {
+}
+
+message ChangePasswordRequest {
+}
+
+message ResetPasswordRequest {
+}
+
+message UserInfo {
+}
+
+service UserCenter {
+  // 注册
+  rpc Register (RegisterRequest) returns (SignResponse) {
+  }
+
+  // 登录
+  rpc Login (LoginRequest) returns (SignResponse) {
+  }
+
+  // 登出
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {
+  }
+
+  // 改密码  需要登录后meta里填入token
+  rpc ChangePassword (ChangePasswordRequest) returns (SignResponse) {
+  }
+
+  // 重置密码
+  rpc ResetPassword (ResetPasswordRequest) returns (SignResponse) {
+  }
+}

@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package engine.api;
+
+
+message SubscribeHotRequest {
+}
+
+message SubscribeHotResponse {
+}
+
+message SubscribeMarketRequest {
+}
+
+message SubscribeMarketResponse {
+}
+
+message SubscribeNewPairRequest {
+}
+
+message SubscribeNewPairResponse {
+}
+
+message GetKlineRequest {
+}
+
+message GetKlineResponse {
+}
+
+message GetHotRequest {
+}
+
+message GetHotResponse {
+}
+
+message GetTradeRequest {
+}
+
+message GetTradeResponse {
+}
+
+message OnNewTradeRequest {
+}
+
+message OnNewTradeResponse {
+}
+
+message OnNewTokenRequest {
+}
+
+message OnNewTokenResponse {
+}
+
+service Engine {
+  // hot页
+  rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
+  }
+
+  // 行情(kline, trade, 基础信息)
+  rpc SubscribeMarket (SubscribeMarketRequest) returns (stream SubscribeMarketResponse) {
+  }
+
+  // 上新
+  rpc SubscribeNewToken (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
+  }
+
+  // 获取kline
+  rpc GetKline (GetKlineRequest) returns (GetKlineResponse) {
+  }
+
+  // 获取Hot
+  rpc GetHot (GetHotRequest) returns (GetHotResponse) {
+  }
+
+  // 获取Trade
+  rpc GetTrade (GetTradeRequest) returns (GetTradeResponse) {
+  }
+
+  // for block-parser
+  rpc OnNewTrade (OnNewTradeRequest) returns (OnNewTradeResponse) {
+  }
+
+  // for block-parser
+  rpc OnNewToken (OnNewTokenRequest) returns (OnNewTokenResponse) {
+  }
+}
