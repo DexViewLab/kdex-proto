@@ -21,16 +21,16 @@ message SubscribeNewPairRequest {
 message SubscribeNewPairResponse {
 }
 
-message GetKlineRequest {
+message GetKlineHistoryRequest {
 }
 
-message GetKlineResponse {
+message GetKlineHistoryResponse {
 }
 
-message GetHotRequest {
+message GetBasicInfoRequest {
 }
 
-message GetHotResponse {
+message GetBasicInfoResponse {
 }
 
 message GetTradeRequest {
@@ -56,7 +56,7 @@ service Engine {
   rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
   }
 
-  // 行情(kline, trade, 基础信息)
+  // 行情(kline, trade)
   rpc SubscribeMarket (SubscribeMarketRequest) returns (stream SubscribeMarketResponse) {
   }
 
@@ -65,15 +65,15 @@ service Engine {
   }
 
   // 获取kline
-  rpc GetKline (GetKlineRequest) returns (GetKlineResponse) {
-  }
-
-  // 获取Hot
-  rpc GetHot (GetHotRequest) returns (GetHotResponse) {
+  rpc GetKlineHistory (GetKlineHistoryRequest) returns (GetKlineHistoryResponse) {
   }
 
   // 获取Trade
   rpc GetTrade (GetTradeRequest) returns (GetTradeResponse) {
+  }
+
+  // 获取基础信息
+  rpc GetBasicInfo (GetBasicInfoRequest) returns (GetBasicInfoResponse) {
   }
 
   // for block-parser

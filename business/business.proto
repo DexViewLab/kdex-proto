@@ -14,6 +14,11 @@ message SubNewTokenRequest {
 message SubNewTokenResponse {
 }
 
+message GetUserSubNewTokensRequest {
+}
+
+message GetUserSubNewTokensResponse {
+}
 
 service Business {
   // 有新币，给订阅的用户发邮件
@@ -22,5 +27,9 @@ service Business {
 
   // 订阅某个币上新
   rpc SubNewToken (SubNewTokenRequest) returns (SubNewTokenResponse) {
+  }
+
+  // 查询某个用户订阅信息
+  rpc GetUserSubNewTokens (GetUserSubNewTokensRequest) returns (GetUserSubNewTokensResponse) {
   }
 }
