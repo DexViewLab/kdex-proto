@@ -1,54 +1,231 @@
 syntax = "proto3";
 
 package engine.api;
+option go_package = "./;enginepb";
 
+enum InternalEngineStatus {
+  INTERNAL_ENGINE__SUCCESS = 0;     //服务正常
+  INTERNAL_ENGINE__ERROR = 1;       //服务异常
+}
+
+enum Dimension{
+  K1M = 0;
+  K5M = 1;
+  K15M = 2;
+  K30M = 3;
+  K1H = 4;
+  K24H = 5;
+}
+
+enum Direction{
+  BUY = 0;
+  SELL = 1;
+}
+
+message Dex {
+  string dex = 1;
+  string version = 2;
+}
+
+message Ping {
+  int64 time_stamp = 1;
+  string ping_message = 2;
+}
+
+message Hot {
+  int64  hot_id = 1;
+  double price = 2;
+  string token_name = 3;
+  string token_address = 4;
+  string token_thumb = 5;
+}
+
+message HotList {
+  repeated Hot hot = 1;
+}
 
 message SubscribeHotRequest {
+  Dex  dex = 1;
 }
 
 message SubscribeHotResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    HotList hot_list = 2;
+    Ping ping = 3;
+  }
 }
 
-message SubscribeMarketRequest {
+message KLine {
+  int64 id = 1;
+  int64 time_stamp = 2;
+  string base = 3;
+  string quote = 4;
+  double open = 5;
+  double close = 6;
+  double low = 7;
+  double high = 8;
+  double volume = 9;
+  Dimension  dimension = 10;
+  Dex  dex = 11;
 }
 
-message SubscribeMarketResponse {
+message KLineList {
+  repeated KLine kline = 1;
+}
+
+message SubscribeKlineRequest {
+  string base_token = 1;
+  string quote_token = 2;
+  Dimension dimension = 3;
+  Dex  dex = 4;
+}
+
+message SubscribeKlineResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    KLineList kline_list = 2;
+    Ping ping = 3;
+  }
+}
+
+message Trade {
+  int64 id = 1;
+  string token_name = 2;
+  string token_address = 3;
+  string direction = 4;
+  int64 time_stamp = 5;
+  string tx_hash = 6;
+  Dex  dex = 7;
+}
+
+message TradeList {
+  repeated Trade trade = 1;
+}
+
+message SubscribeTradeRequest {
+  Dex  dex = 1;
+}
+
+message SubscribeTradeResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    TradeList trade_list = 2;
+    Ping ping = 3;
+  }
+}
+
+message NewToken {
+  int64  id = 1;
+  double price = 2;
+  string token_name = 3;
+  string token_address = 4;
+  string token_thumb = 5;
+  int64  create_time = 6;
+  double total_liquidity = 7;
+  double pool_amount = 8;
+  double pool_remaining = 9;
+  double pool_variation = 10;
+  Dex dex = 11;
+}
+
+message NewTokenList {
+  repeated NewToken new_token = 1;
 }
 
 message SubscribeNewPairRequest {
+  Dex  dex = 1;
 }
 
 message SubscribeNewPairResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    NewTokenList new_token_list = 2;
+    Ping ping = 3;
+  }
 }
 
 message GetKlineHistoryRequest {
+  Dex dex = 1;
+  string base = 2;
+  string quote = 3;
+  Dimension dimension = 4;
+  int64 ts_start = 5;
+  int64 ts_end = 6;
 }
 
 message GetKlineHistoryResponse {
+  InternalEngineStatus status = 1;
+  KLineList kline_list = 2;
+}
+
+message BasicInfo {
+  string token_contract_address = 1;
+  double price_for_usd = 2;
+  double price_for_eth = 3;
+  double min_price = 4;
+  double max_price = 5;
+  double increase = 6;
+  double total_liquidity = 7;
+  double daily_volume = 8;
+  double pooled_token0 = 9;
+  double pooled_token1 = 10;
+  double total_tx = 11;
+  double holders = 12;
+  double market_cap = 13;
+  double diluted_market_cap = 14;
 }
 
 message GetBasicInfoRequest {
+  Dex dex = 1;
+  string token_name = 2;
+  string token_address = 3;
 }
 
 message GetBasicInfoResponse {
+  InternalEngineStatus status = 1;
+  Dex dex = 2;
+  BasicInfo basic_info = 3;
 }
 
 message GetTradeRequest {
+  Dex dex = 1;
+  string token = 2;
+  int64 ts_start = 3;
+  int64 ts_end = 4;
 }
 
 message GetTradeResponse {
+  InternalEngineStatus status = 1;
+  TradeList trade_list = 2;
 }
 
 message OnNewTradeRequest {
+  Direction direction = 1;
+  double price = 2;
+  double amount0 = 3;
+  double amount1 = 4;
+  int64 ts = 5;
+  string address0 = 6;
+  string token0 = 7;
+  string address1 = 8;
+  string token1 = 9;
+  string tx_hash = 10;
 }
 
 message OnNewTradeResponse {
+  InternalEngineStatus status = 1;
 }
 
 message OnNewTokenRequest {
+  string token_name = 1;
+  string token_address = 2;
+  int64  ts = 3;
+  double price = 4;
 }
 
 message OnNewTokenResponse {
+  InternalEngineStatus status = 1;
 }
 
 service Engine {
@@ -56,8 +233,12 @@ service Engine {
   rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
   }
 
-  // 行情(kline, trade)
-  rpc SubscribeMarket (SubscribeMarketRequest) returns (stream SubscribeMarketResponse) {
+  // 行情(kline)
+  rpc SubscribeKline (SubscribeKlineRequest) returns (stream SubscribeKlineResponse) {
+  }
+
+  // 行情(trade)
+  rpc SubscribeTrade (SubscribeTradeRequest) returns (stream SubscribeTradeResponse) {
   }
 
   // 上新

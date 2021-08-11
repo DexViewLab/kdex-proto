@@ -1,28 +1,57 @@
 syntax = "proto3";
 
 package business.api;
+option go_package = "./;businesspb";
 
-message OnNewPairRequest {
+enum InternalBusinessStatus {
+  INTERNAL_BUSINESS__SUCCESS = 0;     //服务正常
+  INTERNAL_BUSINESS__ERROR = 1;       //服务异常
 }
 
-message OnNewPairResponse {
+message User {
+  int64  user_id = 1;
+  string email = 2;
+}
+
+message Token {
+  string name = 1;
+  string address = 2;
+}
+
+message OnNewTokenRequest {
+  Token token = 1;
+  int64 time_stamp = 2;
+  string dex = 3;
+}
+
+message OnNewTokenResponse {
+  InternalBusinessStatus status = 1;
 }
 
 message SubNewTokenRequest {
+  User   user = 1;
+  Token  token = 2;
 }
 
 message SubNewTokenResponse {
+  InternalBusinessStatus status = 1;
 }
 
 message GetUserSubNewTokensRequest {
+  int64 user_id = 1;
 }
 
 message GetUserSubNewTokensResponse {
+  InternalBusinessStatus status = 1;
+  User   user = 2;
+  Token  token = 3;
+  bool   pushed_email = 4;
+  bool   pushed_tele = 5;
 }
 
 service Business {
   // 有新币，给订阅的用户发邮件
-  rpc OnNewPair (OnNewPairRequest) returns (OnNewPairResponse) {
+  rpc OnNewPair (OnNewTokenRequest) returns (OnNewTokenResponse) {
   }
 
   // 订阅某个币上新

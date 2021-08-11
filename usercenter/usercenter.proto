@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package usercenter.api;
+option go_package = "./;usercenterpb";
+
+enum InternalUserCenterStatus {
+  INTERNAL_USERCENTER__SUCCESS = 0;     //服务正常
+  INTERNAL_USERCENTER__ERROR = 1;       //服务异常
+}
+
+enum UserLevel {
+  USER_LEVEL_NORMAL = 0;
+  USER_LEVEL_MID = 1;
+  USER_LEVEL_HIGH = 2;
+}
+
+message RegisterRequest {
+  string email = 1;
+  UserLevel level = 2;
+  string area = 3;
+}
+
+message LoginRequest {
+  string encrypted_password = 1;
+}
+
+// 注册，登录，改密码，重置密码的回复
+message SignResponse {
+  InternalUserCenterStatus status = 1;
+  UserInfo user = 2;
+  string token = 3;
+}
+
+message LogoutRequest {
+  int64 user_id = 1;
+}
+
+message LogoutResponse {
+  InternalUserCenterStatus status = 1;
+}
+
+message ChangePasswordRequest {
+  string encrypted_old_password = 1;
+  string encrypted_new_password = 2;
+}
+
+message UserInfo {
+  int64 id = 1;
+  string email = 2;
+  UserLevel level = 3;
+  string area = 4;
+}
+
+service UserCenter {
+  // 注册
+  rpc Register (RegisterRequest) returns (SignResponse) {
+  }
+
+  // 登录
+  rpc Login (LoginRequest) returns (SignResponse) {
+  }
+
+  // 登出
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {
+  }
+
+  // 改密码  需要登录后meta里填入token
+  rpc ChangePassword (ChangePasswordRequest) returns (SignResponse) {
+  }
+}
