@@ -256,7 +256,7 @@ service Engine {
   }
 
   // 上新
-  rpc SubscribeNewToken (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
+  rpc SubscribeNewPair (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
   }
 
   // 获取kline
