@@ -23,8 +23,9 @@ enum Direction{
 }
 
 message Dex {
-  string dex = 1;
-  string version = 2;
+  string chain = 1;
+  string dex = 2;
+  string version = 3;
 }
 
 message Ping {
@@ -151,6 +152,8 @@ message GetKlineHistoryRequest {
   Dimension dimension = 4;
   int64 ts_start = 5;
   int64 ts_end = 6;
+  int64 start = 7;
+  int64 count = 8;
 }
 
 message GetKlineHistoryResponse {
@@ -173,6 +176,7 @@ message BasicInfo {
   double holders = 12;
   double market_cap = 13;
   double diluted_market_cap = 14;
+  Dex dex = 15;
 }
 
 message GetBasicInfoRequest {
@@ -183,8 +187,7 @@ message GetBasicInfoRequest {
 
 message GetBasicInfoResponse {
   InternalEngineStatus status = 1;
-  Dex dex = 2;
-  BasicInfo basic_info = 3;
+  BasicInfo basic_info = 2;
 }
 
 message GetTradeRequest {
@@ -192,6 +195,8 @@ message GetTradeRequest {
   string token = 2;
   int64 ts_start = 3;
   int64 ts_end = 4;
+  int64 start = 5;
+  int64 count = 6;
 }
 
 message GetTradeResponse {
@@ -210,6 +215,7 @@ message OnNewTradeRequest {
   string address1 = 8;
   string token1 = 9;
   string tx_hash = 10;
+  Dex  dex = 11;
 }
 
 message OnNewTradeResponse {
@@ -235,7 +241,9 @@ message OnPairSyncRequest {
   string token1_address = 4;
   double token0_amount = 5;
   double token1_amount = 6;
-  Dex dex = 7;
+  int64  ts = 7;
+  double value = 8;
+  Dex dex = 9;
 }
 
 message OnPairSyncResponse {
