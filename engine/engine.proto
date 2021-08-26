@@ -206,16 +206,17 @@ message GetTradeResponse {
 
 message OnNewTradeRequest {
   Direction direction = 1;
-  double price = 2;
-  double amount0 = 3;
-  double amount1 = 4;
-  int64 ts = 5;
-  string address0 = 6;
-  string token0 = 7;
-  string address1 = 8;
-  string token1 = 9;
-  string tx_hash = 10;
-  Dex  dex = 11;
+  double price_for_usdt = 2;
+  double price_for_eth = 3;
+  double amount0 = 4;
+  double amount1 = 5;
+  int64 ts = 6;
+  string address0 = 7;
+  string token0 = 8;
+  string address1 = 9;
+  string token1 = 10;
+  string tx_hash = 11;
+  Dex  dex = 12;
 }
 
 message OnNewTradeResponse {
