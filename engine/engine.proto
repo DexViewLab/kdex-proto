@@ -34,11 +34,15 @@ message Ping {
 }
 
 message Hot {
-  int64  hot_id = 1;
-  double price = 2;
-  string token_name = 3;
-  string token_address = 4;
-  string token_thumb = 5;
+  int64  id = 1;
+  string token_name = 2;
+  string token_address = 3;
+  double price = 4;
+  double increase_24h = 5;
+  double increase_7d = 6;
+  double increase_30d = 7;
+  double volume = 8;
+  Dex  dex = 9;
 }
 
 message HotList {
@@ -46,7 +50,7 @@ message HotList {
 }
 
 message SubscribeHotRequest {
-  Dex  dex = 1;
+  string  chain = 1;
 }
 
 message SubscribeHotResponse {
@@ -58,17 +62,19 @@ message SubscribeHotResponse {
 }
 
 message KLine {
-  int64 id = 1;
-  int64 time_stamp = 2;
-  string base = 3;
-  string quote = 4;
-  double open = 5;
-  double close = 6;
-  double low = 7;
-  double high = 8;
+  int64 time_stamp = 1;
+  string base = 2;
+  string quote = 3;
+  double open = 4;
+  double close = 5;
+  double low = 6;
+  double high = 7;
+  double amount = 8;
   double volume = 9;
-  Dimension  dimension = 10;
-  Dex  dex = 11;
+  double increase = 10;
+  double amplitude = 11;
+  Dimension  dimension = 12;
+  Dex  dex = 13;
 }
 
 message KLineList {
@@ -91,13 +97,14 @@ message SubscribeKlineResponse {
 }
 
 message Trade {
-  int64 id = 1;
-  string token_name = 2;
-  string token_address = 3;
-  string direction = 4;
-  int64 time_stamp = 5;
-  string tx_hash = 6;
-  Dex  dex = 7;
+  string token_name = 1;
+  string direction = 2;
+  int64 time_stamp = 3;
+  string tx_hash = 4;
+  double price_usd = 5;
+  double price_eth = 6;
+  double total_value = 7;
+  Dex  dex = 8;
 }
 
 message TradeList {
@@ -106,6 +113,7 @@ message TradeList {
 
 message SubscribeTradeRequest {
   Dex  dex = 1;
+  string token = 2;
 }
 
 message SubscribeTradeResponse {
@@ -120,12 +128,12 @@ message NewToken {
   int64  id = 1;
   double price = 2;
   string token_name = 3;
-  string token_address = 4;
-  string token_thumb = 5;
-  int64  create_time = 6;
-  double token0_amount = 7;
-  double token1_amount = 8;
-  double total_value = 9;
+  int64  create_time = 4;
+  double liquidity = 5;
+  double volume_24h = 6;
+  double increase_1h = 7;
+  string token_address = 8;
+  string pair_contract_address = 9;
   Dex dex = 10;
 }
 
@@ -162,46 +170,24 @@ message GetKlineHistoryResponse {
 }
 
 message BasicInfo {
-  string token_contract_address = 1;
-  double price_for_usd = 2;
-  double price_for_eth = 3;
-  double min_price = 4;
-  double max_price = 5;
-  double increase = 6;
-  double total_liquidity = 7;
-  double daily_volume = 8;
-  double pooled_token0 = 9;
-  double pooled_token1 = 10;
-  double total_tx = 11;
-  double holders = 12;
-  double market_cap = 13;
-  double diluted_market_cap = 14;
-  Dex dex = 15;
+  string base_token_address = 1;
+  string pair_contract_address = 2;
+  double volume_24h = 3;
+  double total_tx = 4;
+  double holders = 5;
+  Dex dex = 6;
 }
 
 message GetBasicInfoRequest {
   Dex dex = 1;
-  string token_name = 2;
-  string token_address = 3;
+  string base_token = 2;
+  string base_token_address = 3;
+  string quote_token = 4;
 }
 
 message GetBasicInfoResponse {
   InternalEngineStatus status = 1;
   BasicInfo basic_info = 2;
-}
-
-message GetTradeRequest {
-  Dex dex = 1;
-  string token = 2;
-  int64 ts_start = 3;
-  int64 ts_end = 4;
-  int64 start = 5;
-  int64 count = 6;
-}
-
-message GetTradeResponse {
-  InternalEngineStatus status = 1;
-  TradeList trade_list = 2;
 }
 
 message OnNewTradeRequest {
@@ -227,12 +213,32 @@ message OnNewTokenRequest {
   string token_name = 1;
   string token_address = 2;
   int64  ts = 3;
-  double price = 4;
-  Dex dex = 5;
+  Dex dex = 4;
 }
 
 message OnNewTokenResponse {
   InternalEngineStatus status = 1;
+}
+
+message SearchTokenResult {
+  string token_name = 1;
+  string token_address = 2;
+  double price_usdt = 3;
+  double increase_1d = 4;
+  Dex dex = 5;
+}
+
+message SearchTokenResultList {
+  repeated SearchTokenResult results = 1;
+}
+
+message SearchTokenRequest {
+  string token_name_or_address = 1;
+}
+
+message SearchTokenResponse {
+  InternalEngineStatus status = 1;
+  SearchTokenResultList result_list = 2;
 }
 
 message OnPairSyncRequest {
@@ -244,7 +250,8 @@ message OnPairSyncRequest {
   double token1_amount = 6;
   int64  ts = 7;
   double value = 8;
-  Dex dex = 9;
+  string contract_address = 9;
+  Dex dex = 10;
 }
 
 message OnPairSyncResponse {
@@ -268,12 +275,12 @@ service Engine {
   rpc SubscribeNewPair (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
   }
 
-  // 获取kline
-  rpc GetKlineHistory (GetKlineHistoryRequest) returns (GetKlineHistoryResponse) {
+  // 搜索
+  rpc SearchToken (SearchTokenRequest) returns (stream SearchTokenResponse) {
   }
 
-  // 获取Trade
-  rpc GetTrade (GetTradeRequest) returns (GetTradeResponse) {
+  // 获取kline
+  rpc GetKlineHistory (GetKlineHistoryRequest) returns (GetKlineHistoryResponse) {
   }
 
   // 获取基础信息
