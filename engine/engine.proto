@@ -113,7 +113,8 @@ message TradeList {
 
 message SubscribeTradeRequest {
   Dex  dex = 1;
-  string token = 2;
+  string base_token = 2;
+  string quote_token = 3;
 }
 
 message SubscribeTradeResponse {
