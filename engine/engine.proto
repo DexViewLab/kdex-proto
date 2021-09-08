@@ -276,7 +276,7 @@ service Engine {
   }
 
   // 搜索
-  rpc SearchToken (SearchTokenRequest) returns (stream SearchTokenResponse) {
+  rpc SearchToken (SearchTokenRequest) returns (SearchTokenResponse) {
   }
 
   // 获取kline
