@@ -202,7 +202,8 @@ message OnNewTradeRequest {
   string address1 = 9;
   string token1 = 10;
   string tx_hash = 11;
-  Dex  dex = 12;
+  double total_value = 12;
+  Dex  dex = 13;
 }
 
 message OnNewTradeResponse {
