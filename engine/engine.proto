@@ -173,8 +173,8 @@ message BasicInfo {
   string base_token_address = 1;
   string pair_contract_address = 2;
   double volume_24h = 3;
-  double total_tx = 4;
-  double holders = 5;
+  int64 total_tx = 4;
+  int64 holders = 5;
   Dex dex = 6;
 }
 
