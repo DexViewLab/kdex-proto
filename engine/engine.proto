@@ -99,11 +99,13 @@ message Trade {
   string token_name = 1;
   string direction = 2;
   int64 time_stamp = 3;
-  string tx_hash = 4;
   double price_usd = 5;
   double price_eth = 6;
   double total_value = 7;
-  Dex  dex = 8;
+  string tx_hash = 4;
+  string base_url = 8;
+  double amount = 9;
+  Dex  dex = 10;
 }
 
 message TradeList {
@@ -171,11 +173,13 @@ message GetKlineHistoryResponse {
 
 message BasicInfo {
   string base_token_address = 1;
-  string pair_contract_address = 2;
-  double volume_24h = 3;
-  int64 total_tx = 4;
-  int64 holders = 5;
-  Dex dex = 6;
+  string token_base_url = 2;
+  string pair_contract_address = 3;
+  string pair_base_url = 4;
+  double volume_24h = 5;
+  int64 total_tx = 6;
+  int64 holders = 7;
+  Dex dex = 8;
 }
 
 message GetBasicInfoRequest {
@@ -261,6 +265,14 @@ message OnPairSyncResponse {
   InternalEngineStatus status = 1;
 }
 
+message OnParseRecentlyBlockRequest {
+  bool  parse_recently_block = 1;
+}
+
+message OnParseRecentlyBlockResponse {
+  InternalEngineStatus status = 1;
+}
+
 service Engine {
   // hot页
   rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
@@ -300,5 +312,9 @@ service Engine {
 
   // for block-parser
   rpc OnPairSync (OnPairSyncRequest) returns (OnPairSyncResponse) {
+  }
+
+  // for block-parser
+  rpc OnParseRecentlyBlock (OnParseRecentlyBlockRequest) returns (OnParseRecentlyBlockResponse) {
   }
 }
