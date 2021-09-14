@@ -50,7 +50,6 @@ message HotList {
 }
 
 message SubscribeHotRequest {
-  string  chain = 1;
 }
 
 message SubscribeHotResponse {
