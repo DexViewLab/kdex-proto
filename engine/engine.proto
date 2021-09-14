@@ -204,7 +204,9 @@ message OnNewTradeRequest {
   string token1 = 10;
   string tx_hash = 11;
   double total_value = 12;
-  Dex  dex = 13;
+  int64 helder = 13;
+  int64 tx_count = 14;
+  Dex  dex = 15;
 }
 
 message OnNewTradeResponse {
