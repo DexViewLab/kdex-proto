@@ -99,10 +99,10 @@ message Trade {
   string token_name = 1;
   string direction = 2;
   int64 time_stamp = 3;
+  string tx_hash = 4;
   double price_usd = 5;
   double price_eth = 6;
   double total_value = 7;
-  string tx_hash = 4;
   string base_url = 8;
   double amount = 9;
   Dex  dex = 10;
