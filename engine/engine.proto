@@ -280,6 +280,14 @@ message OnParseRecentlyBlockResponse {
   InternalEngineStatus status = 1;
 }
 
+message OnParseBlockTimeRequest {
+  int64 current_block_time_stamp = 1;
+}
+
+message OnParseBlockTimeResponse {
+  InternalEngineStatus status = 1;
+}
+
 service Engine {
   // hot页
   rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
@@ -323,5 +331,9 @@ service Engine {
 
   // for block-parser
   rpc OnParseRecentlyBlock (OnParseRecentlyBlockRequest) returns (OnParseRecentlyBlockResponse) {
+  }
+
+  // for block-parser
+  rpc OnParseBlockTime (OnParseBlockTimeRequest) returns (OnParseBlockTimeResponse) {
   }
 }
