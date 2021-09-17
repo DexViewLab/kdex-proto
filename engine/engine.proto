@@ -172,6 +172,7 @@ message GetKlineHistoryRequest {
   Dimension dimension = 4;
   int64 ts_start = 5;
   int64 ts_end = 6;
+  string base_address = 7;
 }
 
 message GetKlineHistoryResponse {
