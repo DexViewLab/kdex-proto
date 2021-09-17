@@ -90,6 +90,7 @@ message SubscribeKlineRequest {
   string quote_token = 2;
   Dimension dimension = 3;
   Dex  dex = 4;     // 交易所信息
+  string base_token_address = 5;
 }
 
 message SubscribeKlineResponse {
@@ -111,6 +112,7 @@ message Trade {
   string base_url = 8;    // base_url + tx_hash是一个跳转链接
   double amount = 9;
   Dex  dex = 10;
+  string token_address = 11;
 }
 
 message TradeList {
@@ -122,6 +124,7 @@ message SubscribeTradeRequest {
   Dex  dex = 1;
   string base_token = 2;
   string quote_token = 3;
+  string base_token_address = 4;
 }
 
 message SubscribeTradeResponse {
@@ -185,6 +188,7 @@ message BasicInfo {
   int64 total_tx = 6;
   int64 holders = 7;
   Dex dex = 8;
+  string base_token_Name = 9;
 }
 
 //获取基本信息，详情页上部那些数据，所有都是必填项
