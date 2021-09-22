@@ -9,9 +9,10 @@ enum InternalBusinessStatus {
 }
 
 message Banner {
-  string image_url = 1;
-  string title = 2;
-  string description = 3;
+  int64  banner_id = 1;
+  string image_url = 2;
+  string title = 3;
+  string description = 4;
 }
 
 message BannerList {
@@ -28,20 +29,38 @@ message GetBannerResponse {
   BannerList banners = 2;
 }
 
+message DeleteBannerRequest {
+  repeated int32 banner_id = 1;
+}
+
+message DeleteBannerResponse {
+  InternalBusinessStatus status = 1;
+}
+
+message AddBannerRequest {
+  repeated BannerList banner_list = 1;
+}
+
+message AddBannerResponse {
+  InternalBusinessStatus status = 1;
+}
+
 message TokenIcon {
-  string token_address = 1;
-  string small_image_url = 2;
-  string middle_image_url = 3;
-  string large_image_url = 4;
+  int64  token_icon_id = 1;
+  string token_address = 2;
+  string small_image_url = 3;
+  string middle_image_url = 4;
+  string large_image_url = 5;
 }
 
 message DexIcon {
-  string chain = 1;
-  string dex = 2;
-  string version = 3;
-  string small_image_url = 4;
-  string middle_image_url = 5;
-  string large_image_url = 6;
+  int64  dex_icon_id = 1;
+  string chain = 2;
+  string dex = 3;
+  string version = 4;
+  string small_image_url = 5;
+  string middle_image_url = 6;
+  string large_image_url = 7;
 }
 
 message IconList {
@@ -70,11 +89,42 @@ message GetIconResponse {
   IconList icons = 2;
 }
 
+message DeleteIconRequest {
+  repeated int32 token_icon_id = 1;
+  repeated int32 dex_icon_id = 2;
+}
+
+message DeleteIconResponse {
+  InternalBusinessStatus status = 1;
+}
+
+message AddIconRequest {
+  repeated TokenIcon token_icons = 1;
+  repeated DexIcon dex_icons = 2;
+}
+
+message AddIconResponse {
+  InternalBusinessStatus status = 1;
+}
+
 service Business {
   // Banner
   rpc GetBanner (GetBannerRequest) returns (GetBannerResponse) {
   }
+
+  rpc DeleteBanner (DeleteBannerRequest) returns (DeleteBannerResponse) {
+  }
+
+  rpc AddBanner (AddBannerRequest) returns (AddBannerResponse) {
+  }
+
   // Icon
   rpc GetIcon (GetIconRequest) returns (GetIconResponse) {
+  }
+
+  rpc DeleteIcon (DeleteIconRequest) returns (DeleteIconResponse) {
+  }
+
+  rpc AddIcon (AddIconRequest) returns (AddIconResponse) {
   }
 }
