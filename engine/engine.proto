@@ -26,6 +26,11 @@ enum Direction{
   SELL = 1;
 }
 
+enum NewPairOperation {
+  UPDATE = 0;
+  ADD = 1;
+}
+
 message Dex {
   string chain = 1;  //链eth, bsc,
   string dex = 2;    //交易所 sushi, uniswap, pancake
@@ -152,7 +157,7 @@ message NewTokenList {
   repeated NewToken new_token = 1;
 }
 
-// 订阅交易
+// 订阅NewPair
 message SubscribeNewPairRequest {
 }
 
@@ -162,6 +167,18 @@ message SubscribeNewPairResponse {
     NewTokenList new_token_list = 2;
     Ping ping = 3;
   }
+  NewPairOperation operation = 4;
+  int64  new_pair_count = 5;
+}
+
+message GetNewPairRequest {
+  int64 index = 1;  // 第几条开始(不是id)
+  int64 count = 2;  // 不填默认返回300
+}
+
+message GetNewPairResponse {
+  InternalEngineStatus status = 1;
+  NewTokenList new_token_list = 2;
 }
 
 //获取k线历史，tradingview在拖动查历史的时候调用
@@ -277,14 +294,6 @@ message OnPairSyncResponse {
   InternalEngineStatus status = 1;
 }
 
-message OnParseRecentlyBlockRequest {
-  bool  parse_recently_block = 1;
-}
-
-message OnParseRecentlyBlockResponse {
-  InternalEngineStatus status = 1;
-}
-
 message OnParseBlockTimeRequest {
   int64 current_block_time_stamp = 1;
 }
@@ -306,8 +315,12 @@ service Engine {
   rpc SubscribeTrade (SubscribeTradeRequest) returns (stream SubscribeTradeResponse) {
   }
 
-  // 上新
+  // 上新， 订阅
   rpc SubscribeNewPair (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
+  }
+
+  // 上新，查询
+  rpc GetNewPair (GetNewPairRequest) returns (GetNewPairResponse) {
   }
 
   // 搜索
@@ -332,10 +345,6 @@ service Engine {
 
   // for block-parser
   rpc OnPairSync (OnPairSyncRequest) returns (OnPairSyncResponse) {
-  }
-
-  // for block-parser
-  rpc OnParseRecentlyBlock (OnParseRecentlyBlockRequest) returns (OnParseRecentlyBlockResponse) {
   }
 
   // for block-parser
