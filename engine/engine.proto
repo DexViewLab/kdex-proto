@@ -26,11 +26,6 @@ enum Direction{
   SELL = 1;
 }
 
-enum NewPairOperation {
-  UPDATE = 0;
-  ADD = 1;
-}
-
 message Dex {
   string chain = 1;  //链eth, bsc,
   string dex = 2;    //交易所 sushi, uniswap, pancake
@@ -167,8 +162,7 @@ message SubscribeNewPairResponse {
     NewTokenList new_token_list = 2;
     Ping ping = 3;
   }
-  NewPairOperation operation = 4;
-  int64  new_pair_count = 5;
+  int64  new_pair_count = 4;
 }
 
 message GetNewPairRequest {
