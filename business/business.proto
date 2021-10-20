@@ -13,118 +13,49 @@ message Banner {
   string image_url = 2;
   string title = 3;
   string description = 4;
+  bool on_line = 5;
 }
 
 message BannerList {
   repeated Banner results = 1;
 }
 
-//获取Banner
-message GetBannerRequest {
-  string  version = 1;
+message GetBannersRequest {
 }
 
-message GetBannerResponse {
+message GetBannersResponse {
   InternalBusinessStatus status = 1;
   BannerList banners = 2;
-}
-
-message DeleteBannerRequest {
-  repeated int32 banner_id = 1;
-}
-
-message DeleteBannerResponse {
-  InternalBusinessStatus status = 1;
-}
-
-message AddBannerRequest {
-  repeated BannerList banner_list = 1;
-}
-
-message AddBannerResponse {
-  InternalBusinessStatus status = 1;
 }
 
 message TokenIcon {
   int64  token_icon_id = 1;
   string token_address = 2;
-  string small_image_url = 3;
-  string middle_image_url = 4;
-  string large_image_url = 5;
-}
-
-message DexIcon {
-  int64  dex_icon_id = 1;
-  string chain = 2;
-  string dex = 3;
-  string version = 4;
-  string small_image_url = 5;
-  string middle_image_url = 6;
-  string large_image_url = 7;
+  string small_icon_base64 = 3;
+  string middle_icon_base64 = 4;
+  string large_icon_base64 = 5;
 }
 
 message IconList {
   repeated TokenIcon token_icons = 1;
-  repeated DexIcon dex_icons = 2;
 }
 
-message TokenIconRequest {
+message GetTokenIconsRequest {
   string token_address = 1;
 }
 
-message DexIconRequest {
-  string chain = 1;
-  string dex = 2;
-  string version = 3;
-}
-
-//获取Icon
-message GetIconRequest {
-  repeated TokenIconRequest token_icon = 1;
-  repeated DexIconRequest dex_icon = 2;
-}
-
-message GetIconResponse {
+message GetTokenIconsResponse {
   InternalBusinessStatus status = 1;
   IconList icons = 2;
 }
 
-message DeleteIconRequest {
-  repeated int32 token_icon_id = 1;
-  repeated int32 dex_icon_id = 2;
-}
-
-message DeleteIconResponse {
-  InternalBusinessStatus status = 1;
-}
-
-message AddIconRequest {
-  repeated TokenIcon token_icons = 1;
-  repeated DexIcon dex_icons = 2;
-}
-
-message AddIconResponse {
-  InternalBusinessStatus status = 1;
-}
 
 service Business {
   // Banner
-  rpc GetBanner (GetBannerRequest) returns (GetBannerResponse) {
+  rpc GetBanners (GetBannersRequest) returns (GetBannersResponse) {
   }
 
-  rpc DeleteBanner (DeleteBannerRequest) returns (DeleteBannerResponse) {
-  }
-
-  rpc AddBanner (AddBannerRequest) returns (AddBannerResponse) {
-  }
-
-  // Icon
-  rpc GetIcon (GetIconRequest) returns (GetIconResponse) {
-  }
-
-  rpc DeleteIcon (DeleteIconRequest) returns (DeleteIconResponse) {
-  }
-
-  rpc AddIcon (AddIconRequest) returns (AddIconResponse) {
+  // TokenIcon
+  rpc GetTokenIcons (GetTokenIconsRequest) returns (GetTokenIconsResponse) {
   }
 }
