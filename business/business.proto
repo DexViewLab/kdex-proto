@@ -13,7 +13,6 @@ message Banner {
   string image_url = 2;
   string title = 3;
   string description = 4;
-  bool on_line = 5;
 }
 
 message BannerList {
@@ -28,33 +27,18 @@ message GetBannersResponse {
   BannerList banners = 2;
 }
 
-message TokenIcon {
-  int64  token_icon_id = 1;
-  string token_name = 2;
-  string chain = 3;
-  string token_address = 4;
-  string small_icon_base64 = 5;
-  string middle_icon_base64 = 6;
-  string large_icon_base64 = 7;
+message TokenParam {
+  string chain = 1;
+  string token_address = 2;
 }
 
-message IconList {
-  repeated TokenIcon token_icons = 1;
+message TokenParams {
+  repeated TokenParam token_param = 1;
 }
 
-message GetTokenIconsRequest {
-  string token_address = 1;
-}
-
-message GetTokenIconsResponse {
-  InternalBusinessStatus status = 1;
-  IconList icons = 2;
-}
-
+// for backend
 message AddTokenRequest {
-  string token_name = 1;
-  string chain = 2;
-  string token_address = 3;
+  TokenParams params = 1;
 }
 
 message AddTokenResponse {
@@ -62,15 +46,11 @@ message AddTokenResponse {
 }
 
 service Business {
-  // Banner
+  // Banner(for web)
   rpc GetBanners (GetBannersRequest) returns (GetBannersResponse) {
   }
 
-  // TokenIcon
-  rpc GetTokenIcons (GetTokenIconsRequest) returns (GetTokenIconsResponse) {
-  }
-
-  // AddToken
+  // AddToken(for backend)
   rpc AddToken (AddTokenRequest) returns (AddTokenResponse) {
   }
 }
