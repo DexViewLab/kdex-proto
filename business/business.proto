@@ -30,10 +30,12 @@ message GetBannersResponse {
 
 message TokenIcon {
   int64  token_icon_id = 1;
-  string token_address = 2;
-  string small_icon_base64 = 3;
-  string middle_icon_base64 = 4;
-  string large_icon_base64 = 5;
+  string token_name = 2;
+  string chain = 3;
+  string token_address = 4;
+  string small_icon_base64 = 5;
+  string middle_icon_base64 = 6;
+  string large_icon_base64 = 7;
 }
 
 message IconList {
@@ -50,7 +52,9 @@ message GetTokenIconsResponse {
 }
 
 message AddTokenRequest {
-  string token_address = 1;
+  string token_name = 1;
+  string chain = 2;
+  string token_address = 3;
 }
 
 message AddTokenResponse {
