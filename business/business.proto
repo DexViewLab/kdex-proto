@@ -49,6 +49,13 @@ message GetTokenIconsResponse {
   IconList icons = 2;
 }
 
+message AddTokenRequest {
+  string token_address = 1;
+}
+
+message AddTokenResponse {
+  InternalBusinessStatus status = 1;
+}
 
 service Business {
   // Banner
@@ -57,5 +64,9 @@ service Business {
 
   // TokenIcon
   rpc GetTokenIcons (GetTokenIconsRequest) returns (GetTokenIconsResponse) {
+  }
+
+  // AddToken
+  rpc AddToken (AddTokenRequest) returns (AddTokenResponse) {
   }
 }
