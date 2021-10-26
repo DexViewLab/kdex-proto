@@ -45,6 +45,16 @@ message AddTokenResponse {
   InternalBusinessStatus status = 1;
 }
 
+message GetTokenDescriptionRequest {
+  string chain = 1;
+  string address = 2;
+}
+
+message GetTokenDescriptionResponse {
+  InternalBusinessStatus status = 1;
+  string description = 2;
+}
+
 service Business {
   // Banner(for web)
   rpc GetBanners (GetBannersRequest) returns (GetBannersResponse) {
@@ -52,5 +62,9 @@ service Business {
 
   // AddToken(for backend)
   rpc AddToken (AddTokenRequest) returns (AddTokenResponse) {
+  }
+
+  // Get token description
+  rpc GetTokenDescription (GetTokenDescriptionRequest) returns (GetTokenDescriptionResponse) {
   }
 }
