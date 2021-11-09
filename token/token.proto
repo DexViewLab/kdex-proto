@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package token.api;
+option go_package = "./;tokenpb";
+
+enum InternalEngineStatus {
+  INTERNAL_ENGINE__SUCCESS = 0;     //服务正常
+  INTERNAL_ENGINE__ERROR = 1;       //服务异常
+}
+
+message Dex {
+  string chain = 1;  //链eth, bsc,
+  string dex = 2;    //交易所 sushi, uniswap, pancake
+  string version = 3;  // 版本号 uniswap 分为v2，v3
+}
+
+message Ping {
+  int64 time_stamp = 1;
+  string ping_message = 2;
+}
+
+message Hot {
+  int64  id = 1;
+  string token_name = 2;      // 币种
+  string token_address = 3;   // 币的地址，通常是0x开头
+  double price = 4;           //价格，美元为单位
+  double increase_24h = 5;    //24h增幅
+  double increase_7d = 6;     //7天增幅
+  double increase_30d = 7;    //30天增幅
+  double volume = 8;          //成交量 sum(数量*价格)
+  Dex  dex = 9;
+}
+
+message HotList {
+  repeated Hot hot = 1;
+}
+
+message SubscribeHotRequest {
+}
+
+message SubscribeHotResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    HotList hot_list = 2;
+    Ping ping = 3;
+  }
+}
+
+message NewToken {
+  int64  id = 1;
+  double price = 2;
+  string token_name = 3;
+  int64  create_time = 4;
+  double liquidity = 5;
+  double volume_24h = 6;
+  double increase_1h = 7;
+  string token_address = 8;
+  string pair_contract_address = 9;
+  Dex dex = 10;
+}
+
+message NewTokenList {
+  repeated NewToken new_token = 1;
+}
+
+// 订阅NewPair
+message SubscribeNewPairRequest {
+}
+
+message SubscribeNewPairResponse {
+  InternalEngineStatus status = 1;
+  oneof msg {
+    NewTokenList new_token_list = 2;
+    Ping ping = 3;
+  }
+  int64  new_pair_count = 4;
+}
+
+message GetNewPairRequest {
+  int64 index = 1;  // 第几条开始(不是id)
+  int64 count = 2;  // 不填默认返回300
+}
+
+message GetNewPairResponse {
+  InternalEngineStatus status = 1;
+  NewTokenList new_token_list = 2;
+}
+
+message OnNewTokenRequest {
+  string token_name = 1;
+  string token_address = 2;
+  int64  ts = 3;
+  Dex dex = 4;
+}
+
+message OnNewTokenResponse {
+  InternalEngineStatus status = 1;
+}
+
+message SearchTokenResult {
+  string token_name = 1;
+  string token_address = 2;
+  double price_usdt = 3;
+  double increase_1d = 4;
+  Dex dex = 5;
+}
+
+message SearchTokenResultList {
+  repeated SearchTokenResult results = 1;
+}
+
+//按照关键字查询币，不分交易所
+message SearchTokenRequest {
+  string token_name_or_address = 1;
+}
+
+message SearchTokenResponse {
+  InternalEngineStatus status = 1;
+  SearchTokenResultList result_list = 2;
+}
+
+message OnPairSyncRequest {
+  string token0_name = 1;
+  string token0_address = 2;
+  string token1_name = 3;
+  string token1_address = 4;
+  double token0_amount = 5;
+  double token1_amount = 6;
+  int64  ts = 7;
+  double value = 8;
+  string contract_address = 9;
+  Dex dex = 10;
+}
+
+message OnPairSyncResponse {
+  InternalEngineStatus status = 1;
+}
+
+message OnTokenPriceChangedRequest {
+  string token_address = 1;
+  double price = 2;
+  double increase_1h = 3;
+  double increase_24h = 4;
+  double increase_7d = 5;
+  double increase_30d = 6;
+  double volume = 7;
+  double liquidity = 8;
+  Dex dex = 9;
+}
+
+message OnTokenPriceChangedResponse {
+  InternalEngineStatus status = 1;
+}
+
+service Token {
+  // hot页
+  rpc SubscribeHot (SubscribeHotRequest) returns (stream SubscribeHotResponse) {
+  }
+
+  // 上新， 订阅
+  rpc SubscribeNewPair (SubscribeNewPairRequest) returns (stream SubscribeNewPairResponse) {
+  }
+
+  // 上新，查询
+  rpc GetNewPair (GetNewPairRequest) returns (GetNewPairResponse) {
+  }
+
+  // 搜索
+  rpc SearchToken (SearchTokenRequest) returns (SearchTokenResponse) {
+  }
+
+  // for block-parser
+  rpc OnNewToken (OnNewTokenRequest) returns (OnNewTokenResponse) {
+  }
+
+  // for block-parser
+  rpc OnPairSync (OnPairSyncRequest) returns (OnPairSyncResponse) {
+  }
+
+  // for engine
+  rpc OnTokenPriceChanged (OnTokenPriceChangedRequest) returns (OnTokenPriceChangedResponse) {
+  }
+}
